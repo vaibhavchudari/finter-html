@@ -13,8 +13,8 @@ pipeline {
             steps{
                 sh "scp -r /home/abhi/workspace/finter-html-job/* abhi@35.226.53.142:/home/abhi/finter-html/"
                 sh "ssh abhi@35.226.53.142"
-                sh "cd /home/abhi/finter-html"
-                sh "docker-compose down && docker-compose up -d"
+                sh "ssh abhi@35.226.53.142 && cd /home/abhi/finter-html && docker-compose down && docker-compose up -d"
+ //               sh "docker-compose down && docker-compose up -d"
                 echo 'Deployment done'
             }
         }
