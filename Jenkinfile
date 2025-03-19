@@ -11,36 +11,36 @@ pipeline {
         stage("Clone Code") {
             steps {
                 git url: "https://github.com/vaibhavchudari/finter-html.git", branch: "main"
-                echo 'Repository cloned successfully'
+                echo '✅ Repository cloned successfully'
             }
         }
 
         stage("Deploy to Server") {
             steps {
                 script {
-                    // Copy files to remote server
+                    // Securely copy files to the remote server
                     sh "scp -r * ${REMOTE_USER}@${REMOTE_HOST}:${REMOTE_PATH}"
 
-                    // Execute remote commands for deployment
+                    // SSH into the server and execute deployment commands
                     sh """
-                        ssh ${REMOTE_USER}@${REMOTE_HOST} << EOF
-                        cd ${REMOTE_PATH}
-                        docker-compose down
+                        ssh -o StrictHostKeyChecking=no ${REMOTE_USER}@${REMOTE_HOST} '
+                        cd ${REMOTE_PATH} &&
+                        docker-compose down &&
                         docker-compose up -d
-                        EOF
+                        '
                     """
                 }
-                echo 'Deployment completed successfully'
+                echo '✅ Deployment completed successfully'
             }
         }
     }
 
     post {
         success {
-            echo "✅ Pipeline executed successfully!"
+            echo "🎉 Pipeline executed successfully!"
         }
         failure {
-            echo "❌ Pipeline failed!"
+            echo "❌ Pipeline failed! Check logs for details."
         }
     }
 }
