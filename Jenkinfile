@@ -1,0 +1,30 @@
+pipeline {
+    agent { label "finter-html" }
+
+    stages {
+        
+        stage("code"){
+            steps{
+                git url: "https://github.com/vaibhavchudari/finter-html.git", branch: "main"
+                echo 'clone the repo'
+            }
+        }
+        stage("build and test"){
+            steps{
+                sh "scp finter-html abhi@35.226.53.142:/home/abhi/"
+                sh "ssh abhi@35.226.53.142"
+                sh "cd /home/abhi/finter-html"
+                sh "docker-compose down && docker-compose up -d"
+                echo 'Deployment done'
+            }
+        }
+    }
+    post {
+        success {
+            echo "pipeline succeeded!"
+        }
+        failure {
+            echo "pipeline failed!"
+        }
+    }
+}
