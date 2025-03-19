@@ -2,8 +2,8 @@ version: "3.3"
 
 services:
   nginx:
-    image: my-nginx
-    build: .
+    image: my-nginx  # This name will be used locally after building
+    build: .         # This ensures the image is built from the Dockerfile in the current directory
     container_name: nginx_webserver
     ports:
       - "8080:80"
